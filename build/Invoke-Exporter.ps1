@@ -47,14 +47,13 @@ while ($true) {
     $f2b = Invoke-SqliteQuery -ErrorAction continue -DataSource $DataSourcef2b -Query "Select ip FROM bips"
     $log = Invoke-SqliteQuery -ErrorAction continue -DataSource $DataSourcelog -Query "Select ip FROM banned"
 
-    switch ($log) {
-        $null {
-            $ips = ($f2b).ip
-        }
-        default {
-            $ips = (Compare-Object ($f2b).ip ($log).ip).inputobject
-        }
+    if ($null -eq $log) {
+        $ips = ($f2b).ip
     }
+    else {
+        $ips = (Compare-Object ($f2b).ip ($log).ip).inputobject
+    }
+
 
     if ($null -ne $ips) {
         $insertdata = Get-PublicIP $ips -Sleep 2
