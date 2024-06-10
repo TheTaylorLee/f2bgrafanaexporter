@@ -39,7 +39,10 @@ else {
 
 ##################################################
 # Update the Exporter Database
-while ($true) {
+$datasourcef2b = "/f2bgrafanaexporter/db/$env:fail2bandatabase"
+$datasourcelog = '/f2bgrafanaexporter/db/banlog.sqlite'
+
+while (((Test-Path $datasourcef2b) -eq $true) -and ((Test-Path $datasourcelog) -eq $true)) {
     Write-Output "[+] Updating the Exporter Database"
 
     $datasourcef2b = "/f2bgrafanaexporter/db/$env:fail2bandatabase"
@@ -85,3 +88,5 @@ while ($true) {
 
     Start-Sleep -Seconds 3600
 }
+
+Write-Output "[-] Fail2Ban database not found"
