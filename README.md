@@ -15,7 +15,6 @@ services:
     volumes:
       - /home/user/docker/fail2ban:/f2bgrafanaexporter/db # This is where the existing fail2ban database is stored and where the exporter db will be stored
       - /home/user/docker/f2bgrafanaexporter/logs:/f2bgrafanaexporter/logs # This volume is where logs will be stored
-    network_mode: none
     restart: unless-stopped
   grafana:
     image: grafana/grafana-oss:latest
