@@ -86,6 +86,7 @@ while (((Test-Path $datasourcef2b) -eq $true) -and ((Test-Path $datasourcelog) -
         Write-Output "[+] No new IPs to add to the database"
     }
 
+    Write-Output "[+] Paused for 1 hour before checking for new IPs again"
     Start-Sleep -Seconds 3600
 }
 
