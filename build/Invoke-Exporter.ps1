@@ -16,7 +16,7 @@ Import-Module '/f2bgrafanaexporter/run/AdminToolbox.Networking/AdminToolbox.Netw
 ##################################################
 # Setup the Exporter Database
 $datasource = '/f2bgrafanaexporter/db/banlog.sqlite'
-if (Test-Path $datasource -eq $false) {
+if ((Test-Path $datasource) -eq $false) {
     function Invoke-DBSetup {
 
         [CmdletBinding()]
@@ -44,8 +44,8 @@ while ($true) {
 
     $datasourcef2b = "/f2bgrafanaexporter/db/$env:fail2bandatabase"
     $datasourcelog = '/f2bgrafanaexporter/db/banlog.sqlite'
-    $f2b = Invoke-SqliteQuery -ErrorAction Inquire -DataSource $DataSourcef2b -Query "Select ip FROM bips"
-    $log = Invoke-SqliteQuery -ErrorAction Inquire -DataSource $DataSourcelog -Query "Select ip FROM banned"
+    $f2b = Invoke-SqliteQuery -ErrorAction continue -DataSource $DataSourcef2b -Query "Select ip FROM bips"
+    $log = Invoke-SqliteQuery -ErrorAction continue -DataSource $DataSourcelog -Query "Select ip FROM banned"
 
     switch ($log) {
         $null {
