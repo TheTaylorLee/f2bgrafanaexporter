@@ -1,5 +1,5 @@
 # f2bgrafanaexporter
-I created this container as a way to generate a fail2ban grafana dashboard when running fail2ban in a container as well. All the exporter solutions I could find relied on fail2ban running on metal and not in a container. This solution will work with either scenario.
+I created this container as a way to generate a fail2ban grafana dashboard when running fail2ban in a container. All the exporter solutions I could find relied on fail2ban running on metal and not in a container. This solution will work with either scenario.
 
 f2bgrafanaexporter will log all ban instances without clearing old entries. If your jails don't perma ban and the desire is to only show statistics for actively banned addresses, then this isn't the solution for you. f2bgrafanaexporter will update the dashboard once an hour.
 
