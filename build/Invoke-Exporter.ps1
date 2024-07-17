@@ -62,7 +62,7 @@ while (((Test-Path $datasourcef2b) -eq $true) -and ((Test-Path $datasourcelog) -
         try {
             foreach ($ipquery in $ips) {
                 if ($ipinfotoken) {
-                    $ip = Get-PublicIP -IP $ipquery -Token $ipinfotoken -Sleep 2
+                    $ip = Get-PublicIP -IP $ipquery -Token $env:ipinfotoken -Sleep 2
                 }
                 else {
                     $ip = Get-PublicIP -IP $ipquery -Sleep 2

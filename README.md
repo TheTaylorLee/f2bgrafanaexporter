@@ -12,7 +12,7 @@ services:
     container_name: f2bgrafanaexporter
     environment:
       - fail2bandatabase='fail2ban.sqlite3' # This is the name of your fail2ban database. If your f2b install uses a different database name then this should be different.
-      - ipinfotoken="token" # This is an optional variable allowing for exceeding free api limits. To get an api key sign up at ipinfo.io
+      - ipinfotoken=token # This is an optional variable allowing for exceeding free api limits. To get an api key sign up at ipinfo.io
     volumes:
       - /home/user/docker/fail2ban:/f2bgrafanaexporter/db # This is where the existing fail2ban database is stored and where the exporter db will be stored
       - /home/user/docker/f2bgrafanaexporter/logs:/f2bgrafanaexporter/logs # This volume is where logs will be stored
