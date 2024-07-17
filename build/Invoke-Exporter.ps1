@@ -59,10 +59,10 @@ while (((Test-Path $datasourcef2b) -eq $true) -and ((Test-Path $datasourcelog) -
 
 
     if ($null -ne $ips) {
-        $insertdata = Get-PublicIP $ips -Sleep 2
-
         try {
-            foreach ($ip in $insertdata) {
+            foreach ($ipquery in $ips) {
+                $ip = Get-PublicIP $ipquery -Sleep 2
+
                 $query = "INSERT INTO banned (ip, hostname, city, region, country, location, organization, phone) Values (@ip, @hostname, @city, @region, @country, @location, @organization, @phone)"
                 Invoke-SqliteQuery -ErrorAction stop -DataSource $datasourcelog -Query $query -SqlParameters @{
                     ip           = $ip.ip
@@ -74,12 +74,11 @@ while (((Test-Path $datasourcef2b) -eq $true) -and ((Test-Path $datasourcelog) -
                     organization = $ip.organization
                     phone        = $ip.phone
                 }
+                $ip = $null
             }
-            $insertdata = $null
         }
         catch {
-            Write-Host "Error: $_"
-            Write-Host "[-] If the database is locked, stop grafana or close the dashboard, try again, and start grafana" -ForegroundColor green
+            Write-Output "[-] Error: $_"
         }
     }
     else {
