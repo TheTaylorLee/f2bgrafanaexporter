@@ -61,7 +61,12 @@ while (((Test-Path $datasourcef2b) -eq $true) -and ((Test-Path $datasourcelog) -
     if ($null -ne $ips) {
         try {
             foreach ($ipquery in $ips) {
-                $ip = Get-PublicIP $ipquery -Sleep 2
+                if ($ipinfotoken) {
+                    $ip = Get-PublicIP -IP $ipquery -Token $ipinfotoken -Sleep 2
+                }
+                else {
+                    $ip = Get-PublicIP -IP $ipquery -Sleep 2
+                }
 
                 $query = "INSERT INTO banned (ip, hostname, city, region, country, location, organization, phone) Values (@ip, @hostname, @city, @region, @country, @location, @organization, @phone)"
                 Invoke-SqliteQuery -ErrorAction stop -DataSource $datasourcelog -Query $query -SqlParameters @{
