@@ -61,25 +61,31 @@ while (((Test-Path $datasourcef2b) -eq $true) -and ((Test-Path $datasourcelog) -
     if ($null -ne $ips) {
         try {
             foreach ($ipquery in $ips) {
-                if ($env:ipinfotoken) {
-                    $ip = Get-PublicIP -IP $ipquery -Token $env:ipinfotoken -Sleep 2
-                }
-                else {
-                    $ip = Get-PublicIP -IP $ipquery -Sleep 2
-                }
+                # Prevent entries from being added to the database if they are already there and avoid excessive API calls
+                $query = "SELECT * FROM banned WHERE ip = `"$ipquery`""
+                $inspect = Invoke-SqliteQuery -ErrorAction stop -DataSource $datasourcelog -Query $query
+                
+                if ($null -eq $inspect) {
+                    if ($env:ipinfotoken) {
+                        $ip = Get-PublicIP -IP $ipquery -Token $env:ipinfotoken -Sleep 2
+                    }
+                    else {
+                        $ip = Get-PublicIP -IP $ipquery -Sleep 2
+                    }
 
-                $query = "INSERT INTO banned (ip, hostname, city, region, country, location, organization, phone) Values (@ip, @hostname, @city, @region, @country, @location, @organization, @phone)"
-                Invoke-SqliteQuery -ErrorAction stop -DataSource $datasourcelog -Query $query -SqlParameters @{
-                    ip           = $ip.ip
-                    hostname     = $ip.hostname
-                    city         = $ip.city
-                    region       = $ip.region
-                    country      = $ip.country
-                    location     = $ip.location
-                    organization = $ip.organization
-                    phone        = $ip.phone
+                    $query = "INSERT INTO banned (ip, hostname, city, region, country, location, organization, phone) Values (@ip, @hostname, @city, @region, @country, @location, @organization, @phone)"
+                    Invoke-SqliteQuery -ErrorAction stop -DataSource $datasourcelog -Query $query -SqlParameters @{
+                        ip           = $ip.ip
+                        hostname     = $ip.hostname
+                        city         = $ip.city
+                        region       = $ip.region
+                        country      = $ip.country
+                        location     = $ip.location
+                        organization = $ip.organization
+                        phone        = $ip.phone
+                    }
+                    $ip = $null
                 }
-                $ip = $null
             }
         }
         catch {
