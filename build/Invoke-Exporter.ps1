@@ -43,7 +43,8 @@ $datasourcef2b = "/f2bgrafanaexporter/db/$env:fail2bandatabase"
 $datasourcelog = '/f2bgrafanaexporter/db/banlog.sqlite'
 
 while (((Test-Path $datasourcef2b) -eq $true) -and ((Test-Path $datasourcelog) -eq $true)) {
-    Write-Output "[+] Updating the Exporter Database"
+    $date = get-date -format "yyyy/MM/dd HH:mm"
+    Write-Output "[+] Updating the Exporter Database at $date"
 
     $datasourcef2b = "/f2bgrafanaexporter/db/$env:fail2bandatabase"
     $datasourcelog = '/f2bgrafanaexporter/db/banlog.sqlite'
@@ -96,7 +97,9 @@ while (((Test-Path $datasourcef2b) -eq $true) -and ((Test-Path $datasourcelog) -
         Write-Output "[+] No new IPs to add to the database"
     }
 
-    Write-Output "[+] Paused for 1 hour before checking for new IPs again"
+    $date = (get-date).AddHours(1)
+    $dateend = [string]($date).year + "/" + [string]($date).month + "/" + [string]($date).day + " " + [string]($date).hour + ":" + [string]($date).Minute
+    Write-Output "[+] Paused until $dateend"
     Start-Sleep -Seconds 3600
 }
 
