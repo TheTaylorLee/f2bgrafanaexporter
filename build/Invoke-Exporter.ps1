@@ -61,7 +61,7 @@ while (((Test-Path $datasourcef2b) -eq $true) -and ((Test-Path $datasourcelog) -
     if ($null -ne $ips) {
         try {
             foreach ($ipquery in $ips) {
-                # Prevent entries from being added to the database if they are already there and avoid excessive API calls
+                # Prevent entries from being added to the database if they are already there and avoid excessive API calls. This should also prevent compare issues resulting from prior failures.
                 $query = "SELECT * FROM banned WHERE ip = `"$ipquery`""
                 $inspect = Invoke-SqliteQuery -ErrorAction stop -DataSource $datasourcelog -Query $query
                 
